@@ -1,11 +1,76 @@
-\documentclass{article}
+\documentclass[twocolumn]{article}
+\usepackage{graphics}
+\usepackage{graphicx}
 \usepackage[utf8]{inputenc}
 \usepackage{hyperref}
-\title{Interactive Systems}
-\author{Yannick Münz and Marius Hahn}
-\date{April 2022}
+\usepackage{natbib}
+\usepackage{graphicx}
+\graphicspath{ {./images/} }
+
+%links
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+%Pseudocode
+\usepackage[german,vlined,longend,ruled,linesnumbered]{algorithm2e}
+\SetKw{KwDownTo}{downto}
+\SetKw{KwAnd}{and}
+\SetKw{KwOr}{or}
+\SetKwBlock{DoParallel}{do in parallel}{end}
+\usepackage{xcolor}
+\newcommand\mycommfont[1]{\footnotesize\ttfamily\textcolor{blue}{#1}}
+\SetCommentSty{mycommfont}
+\DontPrintSemicolon
+
+\newcommand{\aetitle}{Efficient updating Customizable Contraction Hierarchies} % Title of the 
+
+\newcommand{\studentOne}{Marius Hahn} % Name 2
+\newcommand{\studentTwo}{Efficient updating Customizable Contraction Hierarchies} % Name 2
+
+
+% Bis zum 19.07. soll ein kurzer Report abgegeben werden (ca. 2 Seiten), der das zugewiesene
+% Thema kritisch betrachtet und Limitation der vorgestellten Algorithmem analysiert, z.B. hinsichtlich 
+% der Performanz. Außerdem sollen mögliche auf dem Paper basierende weitergehende Forschungsfragen
+% benannt werden.
+
 \begin{document}
-\maketitle
-\section*{Title}
-\subsection*{Subtitle}
+
+\input{assets/title}
+
+\section{Intro}
+
+This is a seminar on "Efficient shortest path index maintenance on dynamic
+road networks with theoretical guarantees" \cite{Ouyang2020}. The papers generally is
+about finding the shortest path in road networks. By \textit{shortest} it is meant,
+the path that requires the less time to get from source $s$ to a target $t$. The route
+network is modeled as a directed graph $G(V,E)$ where each street crossing represents a
+vertex $v \epsilon V$ and each road between crossings represents an edge $e \epsilon E$.
+The most basic and solid method to find shortest paths between vertices in a graph is
+Dijkstra's algorithm \cite{Dijkstra1959}. This algorithm is proofed to always return the
+correct shortest path but it is not fast for just in time route planning on large
+road networks as we know it from services like Google Maps. There are many of
+different approaches that try to speed up shortest path queries by precomputing 
+any different kind of index structure before doing the shortest path query. The index 
+structure discussed in \cite{Ouyang2020} is CH (Contraction Hierarchies)\cite{Geisberger}
+with some extension. This extension is CCH (Customizable Contraction Hierarchies) 
+\cite{Dibbelt2014}. Although the authors of \cite{Ouyang2020} never mention the term
+CCH their approaches builds the same index structure. The difference lies in updating 
+the CCH index structure. For updating the CCH, \cite{Ouyang2020} will use yet another
+index structure called \textit{SS-Graph} that help to exactly identify the shortcuts that
+have to be updated, after some edge weight has changed.
+
+\section{Core Topic and Findings}
+
+In this section it is presumed that the idea of Dijkstra \cite{Dijkstra1959} and 
+Contraction Hierarchies \cite{Geisberger} is known. We will not look into querying 
+shortest but paths. 
+
+\newpage
+\bibliographystyle{plain}
+\bibliography{assets/references}
+
 \end{document}
