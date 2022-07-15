@@ -52,10 +52,10 @@ vertex $v \epsilon V$ and each road between crossings represents an edge $e \eps
 The most basic and solid method to find shortest paths between vertices in a graph is
 Dijkstra's algorithm \cite{Dijkstra1959}. This algorithm is proofed to always return the
 correct shortest path but it is not fast for just in time route planning on large
-road networks as we know it from services like Google Maps. There are many of
+road networks as we know it from services like Google Maps. There are many
 different approaches that try to speed up shortest path queries by precomputing 
 any different kind of index structure before doing the shortest path query. The index 
-structure discussed in \cite{Ouyang2020} is CH (Contraction Hierarchies)\cite{Geisberger}
+structure discussed in here \cite{Ouyang2020} is CH (Contraction Hierarchies)\cite{Geisberger}
 with some extension. This extension is CCH (Customizable Contraction Hierarchies) 
 \cite{Dibbelt2014}. Although the authors of \cite{Ouyang2020} never mention the term
 CCH their approaches builds the same index structure. This is a pity, as for this part 
@@ -63,14 +63,14 @@ they kind of reinvent the wheel.
 \\
 The difference lies in updating 
 the CCH index structure. For updating the CCH, the authors of \cite{Ouyang2020} will use yet another
-index structure called \textit{SS-Graph} that help to exactly identify the shortcuts that
+index structure called \textit{SS-Graph} that helps to exactly identify the shortcuts that
 have to be updated, after some edge weight has changed. In todays implementation, the whole
 index structure is recomputed periodically. This is an valid approach as it is fast enough 
 to stay accurate for route planning in road networks.
 \\
 In \cite{Ouyang2020} the authors would like to find a way that make it possible to handle streaming
 updates. Therefore it is necessary to handle streaming updates, meaning handle single weight decrease
-and increases. To handle this another index structure the \textit{SS-Graph} is introduced.
+and increases. To do so another index structure the \textit{SS-Graph} is introduced.
 This index structure is basically a helper structure to identify the shortcuts
 that have to be updated in the CCH. 
 \\
