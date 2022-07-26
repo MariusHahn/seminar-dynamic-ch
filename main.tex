@@ -6,6 +6,7 @@
 \usepackage{natbib}
 \usepackage{graphicx}
 \usepackage{svg}
+\usepackage{pdfpages}
 %%\usepackage{floatrow}
 
 \graphicspath{ {./assets/images/} }
@@ -40,7 +41,7 @@
 \section{Intro}
 
 This is a seminar on "Efficient shortest path index maintenance on dynamic
-road networks with theoretical guarantees" \cite{Ouyang2020}. The papers generally is
+road networks with theoretical guarantees" \cite{Ouyang2020}. The paper is
 about finding the shortest path in road networks. By \textit{shortest} it is meant,
 the path that requires the less time to get from source $s$ to a target $t$. The route
 network is modeled as a directed graph $G(V,E)$ where each street crossing represents a
@@ -67,7 +68,7 @@ index structure is recomputed periodically. This is an valid approach as it is f
 to stay accurate for route planning in road networks.
 \\
 In \cite{Ouyang2020} the authors would like to find a way that make it possible to handle streaming
-updates. Therefore it is necessary to handle streaming updates, meaning handle single weight decrease
+updates. Therefore it is necessary to handle single weight decreases
 and increases. To do so another index structure the \textit{SS-Graph} is introduced.
 This index structure is a helper structure to identify the shortcuts
 that have to be updated in the CCH.
@@ -94,9 +95,8 @@ Hierarchies shortcut index and therefore not of further interest. Although the a
 there is described differently the result is a shortcut index that encodes every simple path.
 This is the same in CCH.
 \\
-Figure \ref{fig:baseGraph} represents the sample base graph on which is used as an example graph 
+Figure \ref{fig:baseGraph} represents the sample base graph which is used as an example graph 
 throughout this whole work. It is the same as used in \cite{Ouyang2020}, but redrawn.
-
 
 \begin{figure}[h]
     \caption{Shortcut Index Graph $G'$}
@@ -118,7 +118,7 @@ out neighbor $v_{s3}$. Each vertex in $V_s$ has three properties.
 \begin{itemize}
     \item The edge or shortcut $e = (v_u, v_v)$ in $G'$ it represents
     \item The shortest path cost $\phi(e)$ 
-    \item The numbers of relation type vertices that support this edge or shortcut and lye on the shortest path $c_{\phi}(e)$
+    \item The number of relation type vertices that support this edge or shortcut and lye on the shortest path $c_{\phi}(e)$
 \end{itemize}
 
 Figure \ref{fig:SsGraph} is the \textit{Shortcut Supporting Graph G*} of \textit{Shortcut Index G'}.
@@ -147,14 +147,16 @@ The space consumption of $G*$ is:
 \\
 $\mathcal{O}(\vert E(G') \vert + \sum_{v \epsilon  V(G')}(\vert Nbr(v) \vert * (\vert Nbr(v) \vert-1)/2))$
 where $Nbr(v) = {u\vert u \epsilon nbr(v) \land \gamma(u) > \gamma(v) }$ and $\gamma(u)$ is the rank of vertex $u$.
-This is a lot more than $G'$ and can be a problem in practice. There exists a method to get this build the needed
-part of this graph on the fly while updating the edges. 
+This is a lot more than $G'$ and can be a problem in practice. Due to the authors there exist an algorithm in their
+\textit{long version of the paper} that does not need to materialize the $G*$. Sadly this 
+\href{https://www.dropbox.com/s/3s7n9u1sv315785/DynSDist.pdf?dl=0}{link} is broken. 
+
 
 \section{Reaction on Weight Changes}
 
 Here we will have a look what happens on a weight decrease or increase. 
 In CCH for the whole shortcut index is updated in a fixed time interval. We want to 
-do streaming updates which means reaction to a single weight change. In classic
+do streaming updates which means react to a single weight change. In classic
 CCH you usually have to recontract at least all vertices with a higher rank than
 the once that form the endpoint of the updated edge. Having the \textit{Shortcut Support Index $G*$}
 it is possible to determine which edges have to be updated. In general this could
@@ -176,18 +178,26 @@ algorithm is presented as is in figure \ref{fig:decreaseAlgorithm}.
     \label{fig:decreaseAlgorithm}
 \end{figure}
 
-What this algorithm basically dose is, when a weight decreases it looks for shortcuts that are build upon this edge.
+What this algorithm basically does is, when a weight decreases happens it looks for shortcuts that are build upon this edge.
 If the weight of this shortcut doesn't depend on the edge it stops. If the weight of this shortcut depends on the edge, 
 meaning the edge was lying on the shortest path, it updates the weight of the shortcut. This happens recursively.
 
 This guarantees that only edges that are one hop dependent on a changed edge are explored. Therefore the time complexity 
 of this algorithm is $\mathcal{O}(\vert\Delta\vert  * (log \vert \Delta \vert + deg'_{max}) + 1)$.  $\vert\Delta\vert$ is the
 number of shortcuts that have to be updated and $deg'_{max}$. 
-% In the worst case $\vert\Delta\vert$ are all edges and shortcuts have a vertex involved with a higher rank than in the changed edge $e$.
+In the worst case $\vert\Delta\vert$ are all edges and shortcuts that have a vertex involved with a higher rank than in the changed edge $e$.
+In practice this is very unlikely. In section \ref{Experimental Results} it is stated that the it actually outperforms CCH.
+
+Because it is ineffective and difficult to describe this algorithm in words there is a step by step slide show attached to this
+paper, that shows how it behaves. 
 
 \subsection{Weight increase}
 In this case a single edge weight increase. The algorithm in figure \ref{fig:increaseAlgorithm} 
-show what to do in this case. 
+show what to do in this case. It basically works in the same manner as the decrease case.
+
+As for the decrease case it guarantees that only edges that are one hop dependent on a changed edge are explored. Therefore the time complexity 
+of this algorithm is $\mathcal{O}(\vert\Delta\vert  * (log \vert \Delta \vert + deg'_{max}) + 1)$.  $\vert\Delta\vert$ is the
+number of shortcuts that have to be updated and $deg'_{max}$. 
 
 \begin{figure}[ht]
     \caption{Shortcut Index Graph $G'$}
@@ -196,8 +206,10 @@ show what to do in this case.
     \label{fig:increaseAlgorithm}
 \end{figure}
 
+Because it is ineffective and difficult to describe this algorithm in words there is a step by step slide show attached to this
+paper, that shows how it behaves. 
 
-\section{Experimental Results}
+\section{Experimental Results} \label{Experimental Results}
 
 The decrease and algorithm have been experimentally evaluated against CCH and CRP. We will only regard the difference between 
 CCH and the algorithms in figure \ref{fig:increaseAlgorithm} and figure \ref{fig:decreaseAlgorithm} as well as their equivalent
@@ -210,8 +222,8 @@ These are real world public road networks in the US.
 \subsection{Space Consumption}
 
 As already mentioned in \ref{Space Consumption} the \textit{Shortcut Support Index $G*$} consumes a lot more memory than 
-the \textit{Shortcut Index G'}. For the dataset their tried out in \cite{Ouyang2020} it used between 12.7 and 34.6 times more
-memory that $G'$, depending on the dataset that was used. This can be avoided when using the on the algorithm that, doesn't 
+the \textit{Shortcut Index G'}. For the dataset they tried out in \cite{Ouyang2020} it used between 12.7 and 34.6 times more
+memory that $G'$, depending on the dataset that was used. This can be avoided when using the on the fly algorithm that, doesn't 
 materialize $G*$. Sadly it wasn't provided in the paper and neither was the code with which they made their experiments.
 
 \subsection{Weight Changes Performance}
@@ -234,7 +246,13 @@ and also some transparency regarding the implementation and the experimentally e
 \clearpage
 
 \bibliographystyle{plain}
-\bibliography{assets/references}
+\bibliography{assets/references} 
 \listoffigures
+
+\clearpage
+
+\includepdf[pages=-, landscape=true]{weightDecrease.pdf} \label{debugDecreaseAlgorithm}
+\includepdf[pages=-, landscape=true]{weightIncrease.pdf} \label{debugIncreaseAlgorithm}
+
 
 \end{document}
