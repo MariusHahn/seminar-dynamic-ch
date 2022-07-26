@@ -191,13 +191,13 @@ In practice this is very unlikely. In section \ref{Experimental Results} it is s
 Because it is ineffective and difficult to describe this algorithm in words there is a step by step slide show attached to this
 paper, that shows how it behaves. 
 
-\subsection{Weight increase}
+\subsection{Weight Increase}
 In this case a single edge weight increase. The algorithm in figure \ref{fig:increaseAlgorithm} 
 show what to do in this case. It basically works in the same manner as the decrease case.
 
 As for the decrease case it guarantees that only edges that are one hop dependent on a changed edge are explored. Therefore the time complexity 
 of this algorithm is $\mathcal{O}(\vert\Delta\vert  * (log \vert \Delta \vert + deg'_{max}) + 1)$.  $\vert\Delta\vert$ is the
-number of shortcuts that have to be updated and $deg'_{max}$. 
+number of shortcuts that have to be updated and $deg'_{max}$. \cite{Ouyang2020}
 
 \begin{figure}[ht]
     \caption{Shortcut Index Graph $G'$}
@@ -211,9 +211,9 @@ paper, that shows how it behaves.
 
 \section{Experimental Results} \label{Experimental Results}
 
-The decrease and algorithm have been experimentally evaluated against CCH and CRP. We will only regard the difference between 
+The decrease and increase algorithm have been experimentally evaluated against CCH and CRP. We will only regard the difference between 
 CCH and the algorithms in figure \ref{fig:increaseAlgorithm} and figure \ref{fig:decreaseAlgorithm} as well as their equivalent
-that doesn't materialized the \textit{Shortcut Support Index $G*$}. 
+that doesn't materialize the \textit{Shortcut Support Index $G*$}.  \cite{Ouyang2020}
 
 \subsection{Dataset}
 The dataset that was used for the experiments comes from \href{http://www.dis.uniroma1.it/challenge9/download.shtml}{here}.
@@ -239,20 +239,21 @@ The generally idea of providing a streaming algorithm for updating a CCH shortcu
 promising, but the whole evaluation should be redone. First of all it should be categorized as \textit{CCH} and not \textit{DCH} – a term that
 wasn't even mentioned in the paper they based their research on \cite{Geisberger2012}. Secondly they should provide the 
 algorithms for the non materialized manner or \textit{the long version of the paper \cite{Ouyang2020}}. Finally, why isn't there
-any link to the source code which they used to test their idea.
+any link to the source code which they used to test their idea?
 
 In my opinion the idea itself is valid but the actual paper would need some additional work in terms of properly categorizing the topic,
 and also some transparency regarding the implementation and the experimentally evaluation.
-\clearpage
+
+\newpage
 
 \bibliographystyle{plain}
 \bibliography{assets/references} 
 \listoffigures
 
-\clearpage
+\newpage
 
-\includepdf[pages=-, landscape=true]{weightDecrease.pdf} \label{debugDecreaseAlgorithm}
-\includepdf[pages=-, landscape=true]{weightIncrease.pdf} \label{debugIncreaseAlgorithm}
+\includepdf[pages=-, landscape=true]{weightDecrease.pdf} 
+\includepdf[pages=-, landscape=true]{weightIncrease.pdf} 
 
 
 \end{document}
