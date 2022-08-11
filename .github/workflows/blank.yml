@@ -24,8 +24,8 @@ jobs:
         with:
           root_file: "main.tex"
           glob_root_file: true 
-      - run: echo "Hello World" > test.txt
+      - run: mv main.pdf seminarPaperMariusHahn`date +%d%m%y-%H%M`.pdf
       - uses: actions/upload-artifact@v3
         with:
           name: seminarPaper
-          path: test.txt
+          path: seminarPaperMariusHahn*.pdf
