@@ -24,7 +24,7 @@ jobs:
         with:
           root_file: "main.tex"
           glob_root_file: true 
-      - run: cat "Hello World" > test.txt
+      - run: echo "Hello World" > test.txt
       - uses: actions/upload-artifact@v3
         with:
           name: seminarPaper
