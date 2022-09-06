@@ -54,20 +54,29 @@ road networks as we know it from services like Google Maps.
 There are many
 different approaches that try to speed up shortest path queries by precomputing
 any different kind of index structure before doing the shortest path query. The index
-structure discussed in here \cite{Ouyang2020} is CH (Contraction Hierarchies)\cite{Geisberger2012}
+structure discussed in "Efficient shortest path index maintenance on dynamic road networks with theoretical guarantees"
+\cite{Ouyang2020} is CH (Contraction Hierarchies)\cite{Geisberger2012}
 with some extension. This extension is CCH (Customizable Contraction Hierarchies)
-\cite{Dibbelt2014}. Although the authors of \cite{Ouyang2020} never mention the term
+\cite{Dibbelt2014}. Although the authors of "Efficient shortest path index maintenance on dynamic road networks with theoretical guarantees"
+never mention the term
 CCH their approaches builds the same index structure. This is a pity, as for this part
-they kind of reinvent the wheel.
+they kind of reinvent the wheel. 
 \\
 The difference lies in updating
-the CCH index structure. For updating the CCH, the authors of \cite{Ouyang2020} will use yet another
+the CCH index structure. For updating the CCH, the authors of "Efficient shortest path index maintenance on dynamic road networks with theoretical guarantees"
+\cite{Ouyang2020} will use yet another
 index structure called \textit{SS-Graph} that helps to exactly identify the shortcuts that
-have to be updated, after some edge weight has changed. In todays implementation, the whole
+have to be updated, after some edge weight has changed. 
+\\
+This works purpose is to show that the update procedure using the \textit{SS-Graph} described in 
+"Efficient shortest path index maintenance on dynamic road networks with theoretical guarantees" \cite{Ouyang2020} can be taken as an 
+extension to CCH. 
+\\
+In todays implementation, the whole
 index structure is recomputed periodically. This is an valid approach as it is fast enough
 to stay accurate for route planning in road networks.
 \\
-In \cite{Ouyang2020} the authors would like to find a way that make it possible to handle streaming
+In "Efficient shortest path index maintenance on dynamic road networks with theoretical guarantees" \cite{Ouyang2020} the authors would like to find a way that make it possible to handle streaming
 updates. Therefore it is necessary to handle single weight decreases
 and increases. To do so another index structure the \textit{SS-Graph} is introduced.
 This index structure is a helper structure to identify the shortcuts
@@ -77,7 +86,7 @@ The disadvantage of this \textit{SS-Graph} is that the overall space consumption
 This can be a deal breaker for large networks.
 Finally they introduce a way to create the necessary \textit{SS-Graph} on the fly. Which
 is only a part of the whole structure.
-Sadly the exact way, how, is missing in the paper \cite{Ouyang2020}.
+Sadly the exact way, how, is missing in the paper "Efficient shortest path index maintenance on dynamic road networks with theoretical guarantees" \cite{Ouyang2020}.
 
 
 
